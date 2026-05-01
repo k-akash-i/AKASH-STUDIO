@@ -9,6 +9,8 @@ interface AuthContextType {
   profile: UserProfile | null;
   loading: boolean;
   signIn: () => Promise<void>;
+  signInWithEmail: (email: string, pass: string) => Promise<void>;
+  signUp: (email: string, pass: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -66,12 +68,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signInWithGoogle();
   };
 
+  const signInWithEmail = async (email: string, pass: string) => {
+    const { signInWithEmailAndPassword } = await import('../lib/firebase');
+    await signInWithEmailAndPassword(auth, email, pass);
+  };
+
+  const signUp = async (email: string, pass: string, name: string) => {
+    const { createUserWithEmailAndPassword } = await import('../lib/firebase');
+    const { user: newUser } = await createUserWithEmailAndPassword(auth, email, pass);
+    
+    // The profile will be created by the onAuthStateChanged listener, 
+    // but the listener doesn't know the name from the signup form yet.
+    // We can update the profile explicitly here or rely on the listener + a name update.
+    const profileRef = doc(db, 'users', newUser.uid);
+    await setDoc(profileRef, {
+      userId: newUser.uid,
+      name,
+      email,
+      role: 'student',
+      createdAt: serverTimestamp()
+    });
+    setProfile({ name, email, role: 'student' });
+  };
+
   const signOutUser = async () => {
     await auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signIn, signOut: signOutUser }}>
+    <AuthContext.Provider value={{ user, profile, loading, signIn, signInWithEmail, signUp, signOut: signOutUser }}>
       {children}
     </AuthContext.Provider>
   );
