@@ -9,6 +9,7 @@ export interface Masterpiece {
   description: string;
   technicalSpecs: string;
   imageUrl: string;
+  previewUrl: string;
   secondaryImageUrl?: string; // For higher res zoom
   date: string;
   status: 'available' | 'exchanged';

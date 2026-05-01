@@ -10,6 +10,59 @@ interface VaultProps {
   onEnterZenMode: (artwork: Masterpiece) => void;
 }
 
+const ProgressiveImage = ({ preview, src, alt }: { preview: string, src: string, alt: string }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFullLoaded, setIsFullLoaded] = useState(false);
+
+  return (
+    <div 
+      className="relative w-full h-full overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Preview - High quality optimized image */}
+      <img
+        src={preview}
+        alt={alt}
+        className={`w-full h-full object-cover grayscale transition-all duration-700 ${
+          isFullLoaded && isHovered ? 'scale-110 opacity-50' : 'opacity-80'
+        }`}
+        referrerPolicy="no-referrer"
+      />
+      
+      {/* High Detail - Ultra high-res on hover */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            src={src}
+            alt={alt}
+            onLoad={() => setIsFullLoaded(true)}
+            className="absolute inset-0 w-full h-full object-cover grayscale z-10 scale-105"
+            referrerPolicy="no-referrer"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Detail Indicator */}
+      <div className={`absolute bottom-4 left-4 z-20 transition-all duration-500 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+        <span className="text-[8px] uppercase tracking-[0.3em] bg-white text-ink px-2 py-1 font-bold">
+          {isFullLoaded ? 'Masterpiece Detail' : 'Loading Detail...'}
+        </span>
+      </div>
+
+      {/* Loading Indicator for Full Res */}
+      {isHovered && !isFullLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-20">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function Vault({ onProposeExchange, onEnterZenMode }: VaultProps) {
   const [selectedWork, setSelectedWork] = useState<Masterpiece | null>(null);
   const [copyFeedback, setCopyFeedback] = useState(false);
@@ -70,11 +123,10 @@ export default function Vault({ onProposeExchange, onEnterZenMode }: VaultProps)
               onClick={() => setSelectedWork(work)}
             >
               <div className="relative aspect-[3/4] bg-white/5 overflow-hidden border border-white/5 group-hover:border-white/20 transition-all duration-700 shadow-2xl">
-                <img
+                <ProgressiveImage
+                  preview={work.previewUrl}
                   src={work.imageUrl}
                   alt={work.title}
-                  className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-out"
-                  referrerPolicy="no-referrer"
                 />
                 
                 {/* Meta Indicator */}
