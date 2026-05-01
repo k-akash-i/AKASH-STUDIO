@@ -21,7 +21,7 @@ export type Page = 'landing' | 'vault' | 'exchange' | 'path' | 'academy';
 
 export default function App() {
   const { wishlist } = useWishlist();
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('landing');
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -153,6 +153,22 @@ export default function App() {
                     </span>
                   </motion.button>
                 ))}
+
+                {user && (
+                  <motion.button
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navigationItems.length * 0.1 }}
+                    onClick={() => {
+                      signOut();
+                      setIsNavOpen(false);
+                      setCurrentPage('landing');
+                    }}
+                    className="text-5xl md:text-8xl font-serif text-left block w-full transition-all duration-500 hover:pl-8 group relative opacity-40 hover:opacity-100 text-crimson"
+                  >
+                    Disconnect
+                  </motion.button>
+                )}
               </nav>
 
               <div className="absolute bottom-12 left-8 md:left-24 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-12 text-sm uppercase tracking-widest opacity-60">
