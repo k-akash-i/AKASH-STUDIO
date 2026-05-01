@@ -24,8 +24,8 @@ const ProgressiveImage = ({ preview, src, alt }: { preview: string, src: string,
       <img
         src={preview}
         alt={alt}
-        className={`w-full h-full object-cover grayscale transition-all duration-700 ${
-          isFullLoaded && isHovered ? 'scale-110 opacity-50' : 'opacity-80'
+        className={`w-full h-full object-cover transition-all duration-700 ${
+          isFullLoaded && isHovered ? 'scale-110 opacity-30 blur-sm' : 'opacity-100'
         }`}
         referrerPolicy="no-referrer"
       />
@@ -40,7 +40,7 @@ const ProgressiveImage = ({ preview, src, alt }: { preview: string, src: string,
             src={src}
             alt={alt}
             onLoad={() => setIsFullLoaded(true)}
-            className="absolute inset-0 w-full h-full object-cover grayscale z-10 scale-105"
+            className="absolute inset-0 w-full h-full object-cover z-10 scale-105"
             referrerPolicy="no-referrer"
           />
         )}
@@ -140,7 +140,7 @@ export default function Vault({ onProposeExchange, onEnterZenMode }: VaultProps)
                       e.stopPropagation();
                       toggleWishlist(work.id);
                     }}
-                    className={`p-2 transition-transform hover:scale-110 ${isInWishlist(work.id) ? 'text-accent' : 'text-white/30 hover:text-white'}`}
+                    className={`p-2 transition-transform hover:scale-110 ${isInWishlist(work.id) ? 'text-saffron' : 'text-white/30 hover:text-saffron/80'}`}
                    >
                      <Heart size={18} fill={isInWishlist(work.id) ? "currentColor" : "none"} />
                    </button>
@@ -148,8 +148,8 @@ export default function Vault({ onProposeExchange, onEnterZenMode }: VaultProps)
 
                 {/* Status Badge */}
                 <div className="absolute bottom-8 right-8">
-                  <div className="bg-ink/80 backdrop-blur-md px-4 py-2 border border-white/10 rounded-full flex items-center gap-3">
-                    <div className={`w-1 h-1 rounded-full ${work.status === 'available' ? 'bg-accent' : 'bg-white/20'}`} />
+                  <div className="bg-clay/80 backdrop-blur-md px-4 py-2 border border-white/5 rounded-full flex items-center gap-3">
+                    <div className={`w-1 h-1 rounded-full ${work.status === 'available' ? 'bg-indigo' : 'bg-saffron'}`} />
                     <span className="text-[10px] uppercase tracking-[0.2em] font-mono font-bold text-white/80">
                       {work.status}
                     </span>

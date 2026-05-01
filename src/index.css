@@ -6,19 +6,22 @@
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-parchment: #EAEAEA;
-  --color-ink: #080808;
-  --color-clay: #1a1a1a;
-  --color-accent: #C5A059;
+  --color-parchment: #F2F0E9;
+  --color-ink: #0A0A0B;
+  --color-clay: #241A16;
+  --color-accent: #D4AF37;
+  --color-saffron: #E27D60;
+  --color-indigo: #41B3A3;
+  --color-crimson: #8D230F;
 }
 
 @layer base {
   body {
-    @apply bg-ink text-parchment antialiased font-sans transition-colors duration-500 selection:bg-parchment selection:text-ink;
+    @apply bg-ink text-parchment antialiased font-sans transition-colors duration-500 selection:bg-accent selection:text-ink;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+    @apply font-serif text-parchment/95;
   }
 }
 
@@ -28,11 +31,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: #0A0A0B;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+  @apply bg-saffron/20 rounded-full hover:bg-saffron/40 transition-colors;
 }
 
 .mask-fade {
@@ -40,6 +43,14 @@
 }
 
 .bg-dot-pattern {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(226, 125, 96, 0.08) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+.bg-mesh-gradient {
+  background: 
+    radial-gradient(at 0% 0%, rgba(141, 35, 15, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(212, 175, 55, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(65, 179, 163, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(226, 125, 96, 0.05) 0px, transparent 50%);
 }

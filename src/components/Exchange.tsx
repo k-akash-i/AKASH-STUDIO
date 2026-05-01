@@ -64,6 +64,10 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
   return (
     <div className="pt-40 pb-24 px-8 md:px-24 bg-ink min-h-screen relative z-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+        {/* Animated decorative background circles */}
+        <div className="absolute top-1/2 left-0 w-[40vw] h-[40vw] rounded-full bg-saffron/5 blur-[120px] pointer-events-none -translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-[30vw] h-[30vw] rounded-full bg-indigo/5 blur-[100px] pointer-events-none translate-x-1/4" />
+
         <motion.div
            initial={{ opacity: 0, x: -50 }}
            animate={{ opacity: 1, x: 0 }}
@@ -79,7 +83,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
           </div>
 
           <div className="space-y-12">
-            <h2 className="text-[10px] uppercase tracking-[0.4em] font-bold border-b border-white/10 pb-6 text-accent">Value Spectrum</h2>
+            <h2 className="text-[10px] uppercase tracking-widest font-bold border-b border-white/10 pb-6 text-saffron">Value Spectrum</h2>
             <ul className="space-y-8">
               {BARTER_WISHLIST.map((item, index) => (
                 <motion.li 
@@ -90,7 +94,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                   transition={{ delay: index * 0.1 }}
                   className="flex items-center space-x-8 group"
                 >
-                  <span className="font-mono text-[9px] opacity-20 group-hover:opacity-100 transition-opacity">0{index + 1}</span>
+                  <span className="font-mono text-[9px] text-indigo/40 group-hover:text-indigo transition-colors">0{index + 1}</span>
                   <span className="text-lg md:text-xl text-parchment/80 group-hover:text-parchment transition-colors">{item}</span>
                 </motion.li>
               ))}
@@ -114,16 +118,16 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                animate={{ opacity: 1, scale: 1 }}
                className="h-full flex flex-col items-center justify-center text-center space-y-8 py-24"
             >
-              <div className="p-6 bg-parchment/10 rounded-full">
-                <Heart className="text-parchment animate-pulse" size={48} fill="currentColor" />
+              <div className="p-6 bg-saffron/20 rounded-full">
+                <Heart className="text-saffron animate-pulse" size={48} fill="currentColor" />
               </div>
-              <h2 className="text-4xl font-serif italic">Intent Received</h2>
+              <h2 className="text-4xl font-serif italic text-parchment">Intent Received</h2>
               <div className="space-y-4">
                 <p className="opacity-90 text-xl font-light">
-                  Gratitude, <span className="text-accent font-medium">{submissionDetails.name}</span>.
+                  Gratitude, <span className="text-indigo font-medium">{submissionDetails.name}</span>.
                 </p>
                 <p className="opacity-60 max-w-sm mx-auto leading-relaxed">
-                  Your proposal for <span className="italic">"{submissionDetails.masterpieceTitle}"</span> has been witnessed and recorded in the ledger. 
+                  Your proposal for <span className="italic text-saffron">"{submissionDetails.masterpieceTitle}"</span> has been witnessed and recorded in the ledger. 
                   I will review it with presence and reach out soon.
                 </p>
               </div>
@@ -146,7 +150,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
 
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] uppercase tracking-widest text-white/30 flex items-center space-x-2">
+                  <label className="text-[10px] uppercase tracking-widest text-saffron/60 flex items-center space-x-2">
                     <User size={12} />
                     <span>Your Identity</span>
                   </label>
@@ -154,7 +158,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                     type="text"
                     placeholder="Full Name"
                     className={`w-full bg-white/5 border-b outline-none py-3 text-lg font-light transition-all placeholder:text-white/10 ${
-                      errors.name ? 'border-red-500/50' : 'border-white/20 focus:border-white/60'
+                      errors.name ? 'border-crimson/50' : 'border-white/20 focus:border-indigo/60'
                     }`}
                     value={formData.name}
                     onChange={(e) => {
@@ -162,11 +166,11 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                       if (errors.name) setErrors({...errors, name: ''});
                     }}
                   />
-                  {errors.name && <p className="text-[10px] text-red-500 uppercase tracking-widest">{errors.name}</p>}
+                  {errors.name && <p className="text-[10px] text-crimson uppercase tracking-widest">{errors.name}</p>}
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] uppercase tracking-widest text-white/30 flex items-center space-x-2">
+                  <label className="text-[10px] uppercase tracking-widest text-indigo/60 flex items-center space-x-2">
                     <Mail size={12} />
                     <span>Communication Node</span>
                   </label>
@@ -174,7 +178,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                     type="email"
                     placeholder="Email Address"
                     className={`w-full bg-white/5 border-b outline-none py-3 text-lg font-light transition-all placeholder:text-white/10 ${
-                      errors.email ? 'border-red-500/50' : 'border-white/20 focus:border-white/60'
+                      errors.email ? 'border-crimson/50' : 'border-white/20 focus:border-saffron/60'
                     }`}
                     value={formData.email}
                     onChange={(e) => {
@@ -182,7 +186,7 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                       if (errors.email) setErrors({...errors, email: ''});
                     }}
                   />
-                  {errors.email && <p className="text-[10px] text-red-500 uppercase tracking-widest">{errors.email}</p>}
+                  {errors.email && <p className="text-[10px] text-crimson uppercase tracking-widest">{errors.email}</p>}
                 </div>
 
                 <div className="space-y-3">
@@ -233,14 +237,14 @@ export default function Exchange({ preselectedId }: ExchangeProps) {
                   disabled={isSubmitting}
                   className={`w-full py-6 rounded-xl uppercase tracking-[0.4em] text-xs font-bold transition-all flex items-center justify-center space-x-4 shadow-xl ${
                     isSubmitting 
-                    ? 'bg-parchment/20 text-parchment/40 cursor-not-allowed' 
-                    : 'bg-parchment text-ink hover:scale-[1.02] active:scale-[0.98]'
+                    ? 'bg-clay text-parchment/40 cursor-not-allowed' 
+                    : 'bg-saffron text-ink hover:bg-indigo hover:scale-[1.02] active:scale-[0.98]'
                   }`}
                 >
                   <span className={isSubmitting ? '' : 'group-hover:tracking-[0.6em] transition-all duration-500'}>
                     {isSubmitting ? 'Recording Intent...' : 'Initiate Exchange'}
                   </span>
-                  {isSubmitting && <RotateCcw size={14} className="animate-spin" />}
+                  {isSubmitting && <RotateCcw size={14} className="animate-spin text-white" />}
                 </button>
               </form>
             </div>
