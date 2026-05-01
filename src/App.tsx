@@ -5,21 +5,26 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, ArrowRight, Shield, Heart, Zap, MapPin } from 'lucide-react';
+import { Menu, X, ArrowRight, Shield, Heart, Zap, MapPin, GraduationCap } from 'lucide-react';
 import Landing from './components/Landing';
 import Vault from './components/Vault';
 import Exchange from './components/Exchange';
 import Path from './components/Path';
+import Academy from './components/Academy';
 import ZenOverlay from './components/ZenOverlay';
+import AuthModal from './components/AuthModal';
 import { Masterpiece } from './types';
 import { WishlistProvider, useWishlist } from './context/WishlistContext';
+import { useAuth } from './context/AuthContext';
 
-export type Page = 'landing' | 'vault' | 'exchange' | 'path';
+export type Page = 'landing' | 'vault' | 'exchange' | 'path' | 'academy';
 
 export default function App() {
   const { wishlist } = useWishlist();
+  const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('landing');
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [exchangeContext, setExchangeContext] = useState<string | null>(null);
   const [zenArtwork, setZenArtwork] = useState<Masterpiece | null>(null);
 
@@ -35,10 +40,19 @@ export default function App() {
     setCurrentPage('exchange');
   };
 
+  const handleAcademyNavigation = () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+    } else {
+      setCurrentPage('academy');
+    }
+  };
+
   const navigationItems = [
     { id: 'landing', label: 'The Zero' },
     { id: 'vault', label: 'The Vault' },
     { id: 'exchange', label: 'The Exchange' },
+    { id: 'academy', label: 'The Academy', private: true },
     { id: 'path', label: 'The Path' },
   ];
 
@@ -112,7 +126,11 @@ export default function App() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => {
-                      setCurrentPage(item.id as Page);
+                      if (item.id === 'academy') {
+                        handleAcademyNavigation();
+                      } else {
+                        setCurrentPage(item.id as Page);
+                      }
                       setIsNavOpen(false);
                       if (item.id === 'exchange') setExchangeContext(null);
                     }}
@@ -122,6 +140,7 @@ export default function App() {
                   >
                     <span className="flex items-center gap-4">
                       {item.label}
+                      {item.private && <GraduationCap size={24} className="opacity-40" />}
                       {item.id === 'vault' && wishlist.length > 0 && (
                         <motion.span 
                           initial={{ scale: 0 }}
@@ -191,9 +210,15 @@ export default function App() {
               )}
               {currentPage === 'exchange' && <Exchange preselectedId={exchangeContext} />}
               {currentPage === 'path' && <Path />}
+              {currentPage === 'academy' && <Academy />}
             </motion.div>
           </AnimatePresence>
         </main>
+
+        <AuthModal 
+          isOpen={isAuthModalOpen} 
+          onClose={() => setIsAuthModalOpen(false)} 
+        />
 
         {/* Footer (Except on Landing) */}
         {currentPage !== 'landing' && !zenArtwork && (
